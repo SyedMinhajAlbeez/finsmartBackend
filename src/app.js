@@ -36,9 +36,9 @@ app.use(compression());
 
 // Here our API Routes
 
-app.use('/api', coreAuthRouter);
-app.use('/api', adminAuth.isValidAuthToken, coreApiRouter);
-app.use('/api', adminAuth.isValidAuthToken, erpApiRouter);
+app.use('/backends/api', coreAuthRouter);
+app.use('/backends/api', adminAuth.isValidAuthToken, coreApiRouter);
+app.use('/backends/api', adminAuth.isValidAuthToken, erpApiRouter);
 app.use('/download', coreDownloadRouter);
 app.use('/public', corePublicRouter);
 
