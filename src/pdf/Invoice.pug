@@ -1,0 +1,233 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    style.
+      body {
+        font-family: 'Arial', sans-serif;
+        font-size: 13px;
+        color: #222;
+        margin: 0;
+        padding: 20px;
+        background: #fff;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+      }
+      .company-info {
+        text-align: right;
+      }
+      .invoice-title {
+        font-size: 22px;
+        color: #52008c;
+        font-weight: bold;
+      }
+      .invoice-meta {
+        margin-top: 10px;
+        font-size: 13px;
+      }
+      .status {
+        margin-left: 8px;
+        padding: 3px 10px;
+        background: #eaeaea;
+        border-radius: 4px;
+        font-size: 11px;
+        text-transform: capitalize;
+      }
+      .info-section {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        font-size: 13px;
+      }
+      .client-info {
+        margin-top: 25px;
+      }
+      .client-info p {
+        margin: 3px 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 25px;
+      }
+      th, td {
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+        text-align: right;
+      }
+      th {
+        background: #f9f9f9;
+        color: #52008c;
+        text-transform: uppercase;
+        font-size: 11px;
+      }
+      td:first-child, th:first-child {
+        text-align: left;
+      }
+      .total-section {
+        margin-top: 25px;
+        display: flex;
+        justify-content: flex-end;
+      }
+      .totals {
+        width: 250px;
+      }
+      .totals div {
+        display: flex;
+        justify-content: space-between;
+        margin: 5px 0;
+      }
+      .footer {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 11px;
+        color: #666;
+      }
+      .logos {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+      }
+      .logos img {
+        width: 100px;
+      }
+      .qr-code {
+        width: 100px;
+        height: 100px;
+        border: 1px solid #ddd;
+        padding: 5px;
+        background: white;
+      }
+      .no-qr {
+        width: 100px;
+        height: 100px;
+        border: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        font-size: 10px;
+        text-align: center;
+        background: #f9f9f9;
+      }
+
+  body
+    // HEADER
+    .header
+      .left
+        img(src=settings.public_server_file + settings.company_logo, style="width:120px; margin-bottom:10px;")
+        h2.invoice-title #{settings.company_name}
+        p #{settings.company_address}
+        p #{settings.company_reg_number}
+      .logos
+        // QR Code
+        if qrCodeBase64
+          img.qr-code(src=qrCodeBase64, alt="FBR QR Code")
+        else
+          .no-qr
+            | QR Code<br>Not Available
+        
+        // FBR Digital Invoicing System Image
+        img(src='https://invoice.alisonstech-dev.com/fbr_digital.png', alt="FBR Digital" style="width:120px;")
+
+    // INVOICE INFO
+    .invoice-meta
+      h3 Invoice ##{model.invoiceRefNo || 'N/A'}
+      p Date: #{moment(model.invoiceDate).format(dateFormat)}
+      p
+        | Status: #{(model.status || '').toUpperCase()}
+        if model.paymentStatus
+          span.status #{model.paymentStatus}
+
+    // TOTAL SUMMARY
+    .info-section
+      div
+        strong Total: 
+        | #{Number(Number(model.total || 0).toFixed(2)).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      div
+        strong Paid: 
+        | #{Number(Number(model.credit || 0).toFixed(2)).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      div
+        strong Balance: 
+        | #{Number((Number(model.total || 0) - Number(model.credit || 0)).toFixed(2)).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+
+    // CLIENT INFO
+    .client-info
+      - const client = model.buyerBusinessName || {};
+      p
+        strong Client:
+        |  #{client.name || '-'}
+      p
+        | NTN#: #{client['NTN#'] || '-'}
+      p
+        | Address: #{client.address || '-'}, #{client.province || '-'}, #{client.country || '-'}
+      p
+        | Phone: #{client.phone || '-'}
+      p
+        | Email: #{client.email || '-'}
+
+    // ITEMS TABLE
+    - const items = Array.isArray(model.items) ? model.items : [];
+    table
+      thead
+        tr
+          th Product
+          th Quantity
+          th Price
+          th Tax
+          th Total
+      tbody
+        each row in items
+          - const itemData = row.item || {};
+          - const name = itemData['Product Name'] || '-';
+          - const desc = itemData['Product Description'] || '';
+          - const qty = Number(row.quantity || 0);
+          - const price = Number(row.valueSalesExcludingST || 0);
+          - const tax = Number(row.salesTaxApplicable || 0);
+          - const total = price + tax;
+          tr
+            td
+              | #{name}
+              if desc
+                br
+                span(style="color:#888;font-size:11px") #{desc}
+            td #{qty}
+            td Rs. #{Number(price.toFixed(2)).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            td Rs. #{Number(tax.toFixed(2)).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (#{row.rate || '0%'})
+            td Rs. #{Number(total.toFixed(2)).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+
+    // GRAND TOTAL SECTION
+    .total-section
+      .totals
+        - const subtotal = items.reduce((acc, row) => acc + Number(row.valueSalesExcludingST || 0), 0);
+        - const totalTax = items.reduce((acc, row) => acc + Number(row.salesTaxApplicable || 0), 0);
+        - const grandTotal = Number(model.total || 0);
+        - const paid = Number(model.credit || 0);
+        - const balance = grandTotal - paid;
+        
+        div
+          span Subtotal:
+          span Rs. #{Number(subtotal.toFixed(2)).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        div
+          span Tax:
+          span Rs. #{Number(totalTax.toFixed(2)).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        div
+          span Grand Total:
+          span Rs. #{Number(grandTotal.toFixed(2)).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        div
+          span Paid:
+          span Rs. #{Number(paid.toFixed(2)).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        div
+          span Balance:
+          span Rs. #{Number(balance.toFixed(2)).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+
+    // FOOTER
+    .footer
+      | Invoice generated electronically and is valid without signature.

@@ -1,0 +1,114 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style>body {
+  font-family: 'Arial', sans-serif;
+  font-size: 13px;
+  color: #222;
+  margin: 0;
+  padding: 20px;
+  background: #fff;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+.company-info {
+  text-align: right;
+}
+.invoice-title {
+  font-size: 22px;
+  color: #52008c;
+  font-weight: bold;
+}
+.invoice-meta {
+  margin-top: 10px;
+  font-size: 13px;
+}
+.status {
+  margin-left: 8px;
+  padding: 3px 10px;
+  background: #eaeaea;
+  border-radius: 4px;
+  font-size: 11px;
+  text-transform: capitalize;
+}
+.info-section {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  font-size: 13px;
+}
+.client-info {
+  margin-top: 25px;
+}
+.client-info p {
+  margin: 3px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 25px;
+}
+th, td {
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  text-align: right;
+}
+th {
+  background: #f9f9f9;
+  color: #52008c;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+td:first-child, th:first-child {
+  text-align: left;
+}
+.total-section {
+  margin-top: 25px;
+  display: flex;
+  justify-content: flex-end;
+}
+.totals {
+  width: 250px;
+}
+.totals div {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+}
+.footer {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 11px;
+  color: #666;
+}
+.logos {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.logos img {
+  width: 100px;
+}
+.qr-code {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #ddd;
+  padding: 5px;
+  background: white;
+}
+.no-qr {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 10px;
+  text-align: center;
+  background: #f9f9f9;
+}
+</style></head><body><!-- HEADER--><div class="header"><div class="left"><img src="https://finsmart.darakh.com/public/uploads/setting/company-logo.png" style="width:120px; margin-bottom:10px;"><h2 class="invoice-title">finsmart</h2><p>Block E, Gulshan e Iqbal</p><p>00001231421</p></div><div class="logos"><!-- QR Code--><img class="qr-code" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAAAklEQVR4AewaftIAAAOKSURBVO3BUU4sSRAEQY9U3//Kvu+zVEJTdMPAkkqz+A+jrWK0VozWitFaMVq7+EASfovKXUl4QuUkCa+o7JLwW1RWxWitGK0Vo7WLT1B5lyTclYSVyi4J30Hlq1TeJQmvFKO1YrRWjNaK0drFQ0m4S+WuJJwk4UTlJAk7lVUSVipPJOEulbuK0VoxWitGaxcNqOySsErCTmWlcqLylxSjtWK0VozWitHaRVMqqyTsknCXyl9SjNaK0VoxWrt4SOW3qKyS8FOSsFJ5QuUnFKO1YrRWjNaK0drFJyThr1FZJWGnskrCTmWVhLuS8FuK0VoxWitGaxcfUPnrkrBS2SVhpbJLwkrlROX/ohitFaO1YrQW/2GThJXKLgnvoPIdkrBSOUnCTuWuJLyDyl3FaK0YrRWjtWK0dvEBlROVVRJ2Kqsk7FRWSThRWSVhp7JKwk5lpbJLwisqT6iskvAOxWitGK0Vo7WLT0jCTmWlskvCSmWXhFdUnkjCSuW3qJyo7JJwkoSVyqoYrRWjtWK0VozWLj6QhJXKLgkrlZ3KicoqCXepfIckvEMSTlR2Kl9VjNaK0VoxWrv4gMqJyioJ30FllYQnVO5S2SVhpbJKwk7lJAk/oRitFaO1YrRWjNYuPpCEu1R2SThRWSXhLpWTJPyUJJyorJKwU1klYafySjFaK0ZrxWjt4hNUdklYJWGncpKElcpJElZJ2KmsVHZJ+CqVXRJ+ShJWKqtitFaM1orRWjFai/+wScJK5YkkrFTuSsJO5a4knKjskvCKyhNJWKnskrBSuasYrRWjtWK0dvFQEk5UVkm4S+VdVFZJuCsJ76LyVcVorRitFaO1+A//Y0l4QuU7JOEVlSeSsFLZJeEulVUxWitGa8VorRitXXwgCb9FZaWyS8JJEk5U3iEJK5WTJOxUVkm4qxitFaO1YrR28Qkq75KEV5JworJLwkrlJAk7lVUSTlS+QxJOVF4pRmvFaK0YrRWjtYuHknCXyv+Zyi4JryThO6g8kYSVyqoYrRWjtWK0dvEHqaySsFNZJeEJlb+sGK0Vo7VitFaM1i7+oCTcpbJLwl1JOFFZJWGnskrCTuWritFaMVorRmsXD6n8BJVdEu5KwonKicoqCScqTyThq4rRWjFaK0ZrxWjt4hOS8FuScKLyhMoqCTuVVRJ+ispJEl4pRmvFaK0YrcV/GG0Vo7VitFaM1v4DLpSR+FAjXLAAAAAASUVORK5CYII=" alt="FBR QR Code"><!-- FBR Digital Invoicing System Image--><img src="https://finsmart.darakh.com/fbr.png" alt="FBR Digital Invoicing System" style="width:120px;"></div></div><!-- INVOICE INFO--><div class="invoice-meta"><h3>Invoice #123123000</h3><p>Date: 08/10/2025</p><p>Status: DRAFT<span class="status">partially</span></p></div><!-- TOTAL SUMMARY--><div class="info-section"><div><strong>Total: </strong>2360</div><div><strong>Paid: </strong>1000</div><div><strong>Balance: </strong>1360</div></div><!-- CLIENT INFO--><div class="client-info"><p><strong>Client:</strong> Christian Osborne</p><p>NTN#: 4322122443123</p><p>Address: Karachi, Sindh, PK</p><p>Phone: +1 (532) 624-9085</p><p>Email: teno@mailinator.com</p></div><!-- ITEMS TABLE--><table><thead><tr><th>Product</th><th>Quantity</th><th>Price</th><th>Tax</th><th>Total</th></tr></thead><tbody><tr><td>Baylan Printer</td><td>1</td><td>1000</td><td>180 (18%)</td><td>1180</td></tr><tr><td>Baylan Printer</td><td>1</td><td>1000</td><td>180 (18%)</td><td>1180</td></tr></tbody></table><!-- GRAND TOTAL SECTION--><div class="total-section"><div class="totals"><div><span>Subtotal:</span><span>2000</span></div><div><span>Tax:</span><span>360</span></div><div><span>Grand Total:</span><span>2360</span></div><div><span>Paid:</span><span>1000</span></div><div><span>Balance:</span><span>1360</span></div></div></div><!-- FOOTER--><div class="footer">Invoice generated electronically and is valid without signature.</div></body></html>
