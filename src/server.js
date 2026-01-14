@@ -3,42 +3,37 @@ const mongoose = require('mongoose');
 const { globSync } = require('glob');
 const path = require('path');
 
-// -------------------- NODE VERSION CHECK --------------------
-const [major] = process.versions.node.split('.').map(parseFloat);
+// Make sure we are running node 7.6+
+const [major, minor] = process.versions.node.split('.').map(parseFloat);
 if (major < 20) {
-  console.log('Please upgrade your node.js version at least 20 or greater. 👌');
+  console.log('Please upgrade your node.js version at least 20 or greater. 👌\n ');
   process.exit();
 }
 
-// -------------------- ENV VARIABLES --------------------
+// import environmental variables from our variables.env file
 require('dotenv').config({ path: '.env' });
 require('dotenv').config({ path: '.env.local' });
 
-// -------------------- MONGODB CONNECTION --------------------
-mongoose.connect(process.env.DATABASE, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(process.env.DATABASE);
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 mongoose.connection.on('error', (error) => {
-  console.log(`🔥 Common Error → Check your .env file and add your MongoDB URL`);
-  console.error(`🚫 Error → ${error.message}`);
+  console.log(
+    `1. 🔥 Common Error caused issue → : check your .env file first and add your mongodb url`
+  );
+  console.error(`2. 🚫 Error → : ${error.message}`);
 });
 
-mongoose.connection.once('open', () => {
-  console.log('✅ MongoDB connected successfully!');
-});
-
-// -------------------- LOAD MODELS --------------------
 const modelsFiles = globSync('./src/models/**/*.js');
+
 for (const filePath of modelsFiles) {
   require(path.resolve(filePath));
 }
 
-// -------------------- START EXPRESS APP --------------------
+// Start our app!
 const app = require('./app');
-const PORT = process.env.PORT || 8888;
-
-const server = app.listen(PORT, () => {
-  console.log(`🚀 Express running → On PORT : ${server.address().port}`);
+app.set('port', process.env.PORT || 8888);
+const server = app.listen(app.get('port'), () => {
+  console.log(`Express running → On PORT : ${server.address().port}`);
 });

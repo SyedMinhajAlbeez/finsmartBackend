@@ -1,21 +1,23 @@
 const express = require('express');
+
 const cors = require('cors');
 const compression = require('compression');
+
 const cookieParser = require('cookie-parser');
 
 const coreAuthRouter = require('./routes/coreRoutes/coreAuth');
 const coreApiRouter = require('./routes/coreRoutes/coreApi');
-const erpApiRouter = require('./routes/appRoutes/appApi');
 const coreDownloadRouter = require('./routes/coreRoutes/coreDownloadRouter');
 const corePublicRouter = require('./routes/coreRoutes/corePublicRouter');
 const adminAuth = require('./controllers/coreControllers/adminAuth');
 
 const errorHandlers = require('./handlers/errorHandlers');
-const fileUpload = require('express-fileupload');
+const erpApiRouter = require('./routes/appRoutes/appApi');
 
+const fileUpload = require('express-fileupload');
+// create our Express app
 const app = express();
 
-// -------------------- MIDDLEWARE --------------------
 app.use(
   cors({
     origin: true,
@@ -26,28 +28,25 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use(compression());
-// app.use(fileUpload()); // optional, enable if needed
 
-// -------------------- DEFAULT ROOT --------------------
-app.get('/backends/api', (req, res) => {
-  res.json({ success: true, message: 'API is live!' });
-});
+// // default options
+// app.use(fileUpload());
 
-// -------------------- API ROUTES --------------------
-app.use('/backends/api', coreAuthRouter); // public auth routes
-app.use('/backends/api', adminAuth.isValidAuthToken, coreApiRouter); // protected core API routes
-app.use('/backends/api', adminAuth.isValidAuthToken, erpApiRouter); // protected ERP routes
+// Here our API Routes
 
-app.use('/download', coreDownloadRouter); // download routes
-app.use('/public', corePublicRouter); // public routes
+app.use('/api', coreAuthRouter);
+app.use('/api', adminAuth.isValidAuthToken, coreApiRouter);
+app.use('/api', adminAuth.isValidAuthToken, erpApiRouter);
+app.use('/download', coreDownloadRouter);
+app.use('/public', corePublicRouter);
 
-// -------------------- ERROR HANDLING --------------------
-// 404 handler
+// If that above routes didnt work, we 404 them and forward to error handler
 app.use(errorHandlers.notFound);
 
-// Production error handler
+// production error handler
 app.use(errorHandlers.productionErrors);
 
-// -------------------- EXPORT --------------------
+// done! we export it so we can start the site in start.js
 module.exports = app;
