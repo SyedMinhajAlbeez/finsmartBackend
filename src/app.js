@@ -1,23 +1,21 @@
 const express = require('express');
-
 const cors = require('cors');
 const compression = require('compression');
-
 const cookieParser = require('cookie-parser');
 
 const coreAuthRouter = require('./routes/coreRoutes/coreAuth');
 const coreApiRouter = require('./routes/coreRoutes/coreApi');
+const erpApiRouter = require('./routes/appRoutes/appApi');
 const coreDownloadRouter = require('./routes/coreRoutes/coreDownloadRouter');
 const corePublicRouter = require('./routes/coreRoutes/corePublicRouter');
 const adminAuth = require('./controllers/coreControllers/adminAuth');
 
 const errorHandlers = require('./handlers/errorHandlers');
-const erpApiRouter = require('./routes/appRoutes/appApi');
-
 const fileUpload = require('express-fileupload');
-// create our Express app
+
 const app = express();
 
+// -------------------- MIDDLEWARE --------------------
 app.use(
   cors({
     origin: true,
@@ -28,25 +26,28 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(compression());
+// app.use(fileUpload()); // optional, enable if needed
 
-// // default options
-// app.use(fileUpload());
+// -------------------- DEFAULT ROOT --------------------
+app.get('/backends/api', (req, res) => {
+  res.json({ success: true, message: 'API is live!' });
+});
 
-// Here our API Routes
+// -------------------- API ROUTES --------------------
+app.use('/backends/api', coreAuthRouter); // public auth routes
+app.use('/backends/api', adminAuth.isValidAuthToken, coreApiRouter); // protected core API routes
+app.use('/backends/api', adminAuth.isValidAuthToken, erpApiRouter); // protected ERP routes
 
-app.use('/backends/api', coreAuthRouter);
-app.use('/backends/api', adminAuth.isValidAuthToken, coreApiRouter);
-app.use('/backends/api', adminAuth.isValidAuthToken, erpApiRouter);
-app.use('/download', coreDownloadRouter);
-app.use('/public', corePublicRouter);
+app.use('/download', coreDownloadRouter); // download routes
+app.use('/public', corePublicRouter); // public routes
 
-// If that above routes didnt work, we 404 them and forward to error handler
+// -------------------- ERROR HANDLING --------------------
+// 404 handler
 app.use(errorHandlers.notFound);
 
-// production error handler
+// Production error handler
 app.use(errorHandlers.productionErrors);
 
-// done! we export it so we can start the site in start.js
+// -------------------- EXPORT --------------------
 module.exports = app;
